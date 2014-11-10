@@ -1,3 +1,5 @@
+/* jshint undef: true, node: true */
+
 var express = require('express');
 var path = require('path');
 //var favicon = require('serve-favicon');
@@ -25,10 +27,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //The rest routes of the app
 app.use('/', routes);
-app.use('/photo ', photo );
-app.use('/video ', video );
-app.use('/news ', news );
-app.use('/site ', site );
+app.use('/photo', photo );
+app.use('/video', video );
+app.use('/news', news );
+app.use('/site', site );
 
 
 // catch 404 and forward to error handler
