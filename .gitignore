@@ -29,3 +29,10 @@ node_modules
 
 # To ignore Pycharm files
 .idea
+
+# The persistence folder
+persist
+
+#the image folder
+public/images
+

@@ -1,12 +1,9 @@
-<h1>{{title}}</h1>
-<p>
-    news: {{news.[0].text}}
-
-    Content:<br>
+<div id="mainFrame" >
+    <div class="title">{{title}}</div>
+    <h1>Derniere mise a jour le {{lastUpdate}}</h1>
+    <p>{{news.[0].text}}</p>
     {{#each content}}
-        name:{{this.name}}, type:{{this.type}}, legend:{{this.legend}}<br>
+    <div class="photoSection"><a href="images/{{this.name}}"><img src="images/mini/{{this.name}}"/></a></div>
     {{/each}}
+</div>
 
-    derniere mise a jour: {{lastUpdate}}
-
-</p>
