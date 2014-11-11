@@ -1,0 +1,12 @@
+<h1>{{title}}</h1>
+<p>
+    news: {{news.[0].text}}
+
+    Content:<br>
+    {{#each content}}
+        name:{{this.name}}, type:{{this.type}}, legend:{{this.legend}}<br>
+    {{/each}}
+
+    derniere mise a jour: {{lastUpdate}}
+
+</p>

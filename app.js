@@ -2,36 +2,46 @@
 
 var express = require('express');
 var path = require('path');
-//var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var routes = require('./routes');
+var storage = require('node-persist');
+var conf = require('./conf');
 
-
-//Declare the routes here
-var routes = require('./routes/index'); //could be an alternative to static files... need to benchmark.
-var photo = require('./routes/photo');
-var video = require('./routes/video');
-var news = require('./routes/news');
-var site = require('./routes/site');
-
+//The express app
 var app = express();
+
+//Retrieve the documents we stored.
+storage.initSync();
+var db = storage.getItem(conf.documentName);
+
+//In case it is the very first time, let's create a default repository
+if( !db ){
+    console.log("Init of the storage.");
+    var today = new Date();
+    db = {
+        "lastUpdate": today,
+        "title": "Nothing yet",
+        "news": [],
+        "content": []
+    };
+    storage.setItem(conf.documentName, db);
+} else {
+    console.log("Storage found.");
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+// Other middleware
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-//The rest routes of the app
-app.use('/', routes);
-app.use('/photo', photo );
-app.use('/video', video );
-app.use('/news', news );
-app.use('/site', site );
-
+//Add the routes to the app and pass the storage object
+routes( app, storage );
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -64,5 +74,5 @@ app.use(function(err, req, res, next) {
     });
 });
 
-
+//Let's return all of it
 module.exports = app;

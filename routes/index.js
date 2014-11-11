@@ -1,45 +1,20 @@
-var express = require('express');
-var router = express.Router();
-var fs = require('fs');
-var path = require('path');
+/* jshint undef: true, node: true */
 
+var Content = require('./content');
 
-/* GET home page. */
-router.get('/', function(req, res) {
+module.exports = exports = function(app, storage) {
 
-    //Get the content of the image directory
-    var dirName = path.join(__dirname, '..', 'public', 'images', 'thumbnails' );
+    //Define the handlers
+    var contentHandler = new Content(storage);
 
-    console.log('dirName: ' + dirName);
+    //Define the route(s) for the contents
+    app.post('/photo/', contentHandler.savePhoto);
+    app.post('/video/', contentHandler.saveVideo);
+    app.post('/news/', contentHandler.saveNews);
+    app.post('/title/', contentHandler.saveTitle);
 
-    var files = fs.readdirSync(dirName);
-
-    files.sort(function(a, b) {
-        return sortFileByDate(a,b);
-    });
-
-    console.log("Files: ", files);
-
-    res.render('index', { title: "The list", images: files }, function(err, html){
-
-        console.log(html);
-
-    });
-
-});
-
-module.exports = router;
+    app.get('/site/', contentHandler.getSite);
 
 
 
-//Utils to sort the files
-function sortFileByDate( file1, file2 ) {
-    //TODO: add some constants for the directory path
-    var fullPathA = path.join(__dirname, '..', 'public', 'images', 'thumbnails', file1 );
-    var fullPathB = path.join(__dirname, '..', 'public', 'images', 'thumbnails', file2 );
-
-    var mtimeA = fs.statSync(fullPathA).mtime.getTime();
-    var mtimeB = fs.statSync(fullPathB).mtime.getTime();
-
-    return mtimeB - mtimeA;
-}
+};
